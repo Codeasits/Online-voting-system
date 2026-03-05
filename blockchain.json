@@ -1,0 +1,14 @@
+[
+  {
+    "index": 0,
+    "timestamp": 1771664901.1987479,
+    "vote_data": {
+      "type": "genesis",
+      "message": "Voting System Started"
+    },
+    "previous_hash": "0",
+    "nonce": 0,
+    "hash": "15fd88cc53cca15d0fd1bc5b71c417e9eed3a2e15c1e1a8d5222a3f21f296335"
+  }
+]
+
