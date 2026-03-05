@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote Successful - Online Voting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon" style="font-size: 4rem;">✅</div>
+            <h1>Vote Cast Successfully!</h1>
+        </div>
+        
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 25px;">
+            Thank you for participating in the democratic process
+        </p>
+        
+        <!-- Blockchain Receipt -->
+        <div class="receipt">
+            <div class="receipt-title">🧾 Vote Verification Receipt</div>
+            
+            <div class="receipt-item">
+                <span class="receipt-label">Voter ID (Masked)</span>
+                <span class="receipt-value">{{ receipt.voter_id }}</span>
+            </div>
+            
+            <div class="receipt-item">
+                <span class="receipt-label">Party Voted</span>
+                <span class="receipt-value">{{ receipt.party }}</span>
+            </div>
+            
+            <div class="receipt-item">
+                <span class="receipt-label">Block Number</span>
+                <span class="receipt-value">#{{ receipt.block_index }}</span>
+            </div>
+            
+            <div class="receipt-item">
+                <span class="receipt-label">Block Hash</span>
+                <div class="hash-display">{{ receipt.block_hash }}</div>
+            </div>
+            
+            <div class="receipt-item">
+                <span class="receipt-label">Previous Hash</span>
+                <div class="hash-display">{{ receipt.previous_hash }}</div>
+            </div>
+            
+            <div class="receipt-item">
+                <span class="receipt-label">Timestamp</span>
+                <span class="receipt-value">{{ receipt.timestamp }}</span>
+            </div>
+        </div>
+        
+        <div class="blockchain-status valid" style="margin-top: 20px;">
+            <span class="status-icon">🔗</span>
+            <span>Your vote has been permanently recorded on the blockchain!</span>
+        </div>
+        
+        <div class="button-group" style="margin-top: 25px;">
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Print Receipt</button>
+            <a href="/verify" class="btn btn-primary">🔎 Verify My Vote</a>
+            <a href="/" class="btn btn-success">🏠 Return to Home</a>
+        </div>
+        
+        <div class="p-20 border-top">
+            <p style="text-align: center; color: var(--text-secondary); font-size: 0.85rem;">
+                📝 Save your receipt Block Hash for future vote verification<br>
+                Your vote cannot be changed or deleted once recorded
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // Auto-copy hash to clipboard
+        async function copyHash() {
+            const hash = "{{ receipt.block_hash }}";
+            try {
+                await navigator.clipboard.writeText(hash);
+                alert("Hash copied to clipboard!");
+            } catch (err) {
+                console.error("Failed to copy:", err);
+            }
+        }
+    </script>
+</body>
+</html>
+

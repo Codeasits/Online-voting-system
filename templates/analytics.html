@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Online Voting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon">📈</div>
+            <h2>Live Analytics</h2>
+        </div>
+        
+        <!-- Blockchain Status -->
+        <div class="blockchain-status {% if chain_valid %}valid{% else %}invalid{% endif %}">
+            <span class="status-icon">{% if chain_valid %}🔗✅{% else %}⚠️❌{% endif %}</span>
+            <span>Blockchain Integrity: {% if chain_valid %}Verified{% else %}Compromised{% endif %}</span>
+        </div>
+        
+        <!-- Chart -->
+        {% if parties %}
+        <div class="chart-container">
+            <canvas id="voteChart"></canvas>
+        </div>
+        
+        <h3 style="margin-top: 25px;">📊 Vote Distribution</h3>
+        <div class="stats-grid">
+            {% for party, count in zip(parties, counts) %}
+            <div class="stat-card">
+                <div class="stat-value">{{ count }}</div>
+                <div class="stat-label">{{ party }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p style="text-align: center; color: var(--text-secondary); padding: 40px;">
+            No votes recorded yet. Be the first to vote!
+        </p>
+        {% endif %}
+        
+        <div class="button-group" style="margin-top: 25px;">
+            <a href="/dashboard" class="btn btn-primary">📊 Back to Dashboard</a>
+            <a href="/" class="btn btn-secondary">🏠 Back to Home</a>
+        </div>
+    </div>
+    
+    <script>
+        // Party colors for chart
+        const partyColors = {
+            'BJP': '#FF9800',
+            'BSP': '#2196F3',
+            'AAP': '#4CAF50',
+            'INC': '#1976D2',
+            'TMC': '#9C27B0',
+            'CPI': '#F44336'
+        };
+        
+        const parties = {{ parties|tojson }};
+        const counts = {{ counts|tojson }};
+        
+        if (parties.length > 0) {
+            const colors = parties.map(p => partyColors[p] || '#607D8B');
+            
+            new Chart(document.getElementById("voteChart"), {
+                type: "doughnut",
+                data: {
+                    labels: parties,
+                    datasets: [{
+                        data: counts,
+                        backgroundColor: colors,
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Vote Distribution by Party',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+

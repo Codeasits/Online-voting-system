@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Verification - Online Voting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon">📸</div>
+            <h2>Face Verification</h2>
+        </div>
+        
+        <p style="text-align: center; color: var(--text-secondary); marginpx;">
+            Please-bottom: 20 look at the camera for biometric verification
+        </p>
+        
+        <div class="video-container">
+            <video id="video" autoplay playsinline></video>
+        </div>
+        
+        <button id="verifyBtn" class="btn btn-primary" onclick="verify()">
+            ✅ Verify My Face
+        </button>
+        
+        <p id="msg"></p>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/" style="color: var(--primary-color);">← Cancel</a>
+        </div>
+    </div>
+    
+    <script>
+        const video = document.getElementById("video");
+        const msg = document.getElementById("msg");
+        const verifyBtn = document.getElementById("verifyBtn");
+        let stream = null;
+        
+        // Start video stream
+        async function startVideo() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: { ideal: 640 },
+                        height: { ideal: 480 },
+                        facingMode: "user"
+                    } 
+                });
+                video.srcObject = stream;
+            } catch (err) {
+                msg.innerHTML = '<span class="error">Unable to access camera. Please allow camera permissions.</span>';
+                console.error("Camera error:", err);
+            }
+        }
+        
+        startVideo();
+        
+        function verify() {
+            msg.innerHTML = '<div class="loading"></div> Verifying...';
+            verifyBtn.disabled = true;
+            
+            const canvas = document.createElement("canvas");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            if (canvas.width === 0 || canvas.height === 0) {
+                msg.innerHTML = '<span class="error">Camera not ready. Please wait a moment.</span>';
+                verifyBtn.disabled = false;
+                return;
+            }
+            
+            canvas.getContext("2d").drawImage(video, 0, 0);
+            
+            canvas.toBlob(blob => {
+                if (!blob) {
+                    msg.innerHTML = '<span class="error">Failed to capture image. Please try again.</span>';
+                    verifyBtn.disabled = false;
+                    return;
+                }
+                
+                const fd = new FormData();
+                fd.append("image", blob);
+                
+                fetch("/verify_face", { 
+                    method: "POST", 
+                    body: fd 
+                })
+                .then(r => r.json())
+                .then(d => {
+                    if (d.status === "success") {
+                        msg.innerHTML = '<span class="success">✅ Verification Successful! Redirecting...</span>';
+                        setTimeout(() => {
+                            location.href = "/vote";
+                        }, 1000);
+                    } else if (d.status === "no_face") {
+                        msg.innerHTML = '<span class="error">❌ No face detected. Please position your face in the camera.</span>';
+                        verifyBtn.disabled = false;
+                    } else {
+                        msg.innerHTML = '<span class="error">❌ Face not matched. Please try again.</span>';
+                        verifyBtn.disabled = false;
+                    }
+                })
+                .catch(err => {
+                    msg.innerHTML = '<span class="error">❌ Verification failed. Please try again.</span>';
+                    verifyBtn.disabled = false;
+                    console.error("Verification error:", err);
+                });
+            }, 'image/jpeg', 0.9);
+        }
+        
+        // Stop video stream when leaving page
+        window.addEventListener('beforeunload', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        });
+    </script>
+</body>
+</html>
+

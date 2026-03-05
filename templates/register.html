@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Online Voting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon">📝</div>
+            <h2>Voter Registration</h2>
+        </div>
+        
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+        
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="aadhaar">Aadhaar Number</label>
+                <input type="text" id="aadhaar" name="aadhaar" placeholder="12-digit Aadhaar" maxlength="12" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="photo">Your Photo</label>
+                <input type="file" id="photo" name="photo" accept="image/*" required>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 5px;">
+                    📷 Upload a clear face photo for biometric verification
+                </p>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Register Now</button>
+        </form>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/" style="color: var(--primary-color);">← Back to Home</a>
+        </div>
+    </div>
+    
+    <script>
+        // Auto-format Aadhaar input
+        document.getElementById('aadhaar').addEventListener('input', function(e) {
+            this.value = this.value.replace(/\D/g, '').substring(0, 12);
+        });
+        
+        // File name display
+        document.getElementById('photo').addEventListener('change', function(e) {
+            if (this.files[0]) {
+                const label = this.previousElementSibling;
+                label.innerHTML = '📷 Selected: ' + this.files[0].name;
+            }
+        });
+    </script>
+</body>
+</html>
+

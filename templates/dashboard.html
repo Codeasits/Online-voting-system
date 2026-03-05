@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Online Voting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon">📊</div>
+            <h2>Dashboard</h2>
+        </div>
+        
+        <!-- Blockchain Status -->
+        <div class="blockchain-status {% if chain_valid %}valid{% else %}invalid{% endif %}">
+            <span class="status-icon">{% if chain_valid %}🔗✅{% else %}⚠️❌{% endif %}</span>
+            <span>Blockchain: {% if chain_valid %}Secure & Verified{% else %}Compromised{% endif %}</span>
+        </div>
+        
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{ total }}</div>
+                <div class="stat-label">👥 Total Voters</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">{{ voted }}</div>
+                <div class="stat-label">✅ Voted</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">{{ not_voted }}</div>
+                <div class="stat-label">⏳ Not Voted</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">{{ blockchain_blocks }}</div>
+                <div class="stat-label">🔗 Blockchain Blocks</div>
+            </div>
+        </div>
+        
+        <!-- Vote Progress -->
+        {% if total > 0 %}
+        <div class="progress-container">
+            <div class="progress-bar" style="width: {{ (voted / total * 100)|int }}%;">
+                {{ (voted / total * 100)|int }}% Turnout
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Party Vote Counts -->
+        {% if vote_counts %}
+            <h3 style="margin-top: 25px;">📈 Live Vote Distribution</h3>
+            <div class="stats-grid">
+                {% for party, count in vote_counts.items() %}
+                    <div class="stat-card">
+                        <div class="stat-value">{{ count }}</div>
+                        <div class="stat-label">{{ party }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+        
+        <!-- Action Buttons -->
+        <div class="button-group" style="margin-top: 25px;">
+            <a href="/analytics" class="btn btn-primary">📈 View Full Analytics</a>
+            <a href="/" class="btn btn-secondary">🏠 Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
+

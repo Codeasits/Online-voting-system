@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cast Your Vote - Online Voting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon">🗳️</div>
+            <h2>Cast Your Vote</h2>
+        </div>
+        
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 25px;">
+            Select your preferred party to cast your vote
+        </p>
+        
+        <form method="post">
+            <div class="button-group">
+                <button name="vote" value="BJP" class="btn btn-primary party-btn">
+                    <span>🇮🇳 BJP</span>
+                    <span>Bhartiya Janata Party</span>
+                </button>
+                
+                <button name="vote" value="BSP" class="btn btn-primary party-btn">
+                    <span>🎗️ BSP</span>
+                    <span>Bahujan Samaj Party</span>
+                </button>
+                
+                <button name="vote" value="AAP" class="btn btn-primary party-btn">
+                    <span>🟢 AAP</span>
+                    <span>Aam Aadmi Party</span>
+                </button>
+                
+                <button name="vote" value="INC" class="btn btn-primary party-btn">
+                    <span>🟦 INC</span>
+                    <span>Indian National Congress</span>
+                </button>
+                
+                <button name="vote" value="TMC" class="btn btn-primary party-btn">
+                    <span>🟣 TMC</span>
+                    <span>Trinamool Congress</span>
+                </button>
+                
+                <button name="vote" value="CPI" class="btn btn-primary party-btn">
+                    <span>🔴 CPI</span>
+                    <span>Communist Party of India</span>
+                </button>
+            </div>
+        </form>
+        
+        <div class="p-20 border-top">
+            <p style="text-align: center; color: var(--text-secondary); font-size: 0.85rem;">
+                ⚠️ Your vote will be recorded on the blockchain and cannot be changed
+            </p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/" style="color: var(--primary-color);">← Cancel</a>
+        </div>
+    </div>
+</body>
+</html>
+

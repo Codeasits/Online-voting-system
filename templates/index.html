@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Voting System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon">🗳️</div>
+            <h1>Online Voting System</h1>
+            <p style="color: var(--text-secondary); text-align: center;">Secure • Transparent • Immutable</p>
+        </div>
+        
+        {% if total_votes > 0 %}
+        <div class="blockchain-status {% if chain_valid %}valid{% else %}invalid{% endif %}">
+            <span class="status-icon">{% if chain_valid %}✓{% else %}✗{% endif %}</span>
+            <span>Blockchain: {% if chain_valid %}Verified{% else %}Compromised{% endif %} • {{ total_votes }} Votes Recorded</span>
+        </div>
+        {% endif %}
+        
+        <div class="button-group">
+            <a href="/register" class="btn btn-primary">📝 Register as Voter</a>
+            <a href="/authenticate" class="btn btn-success">🔐 Authenticate & Vote</a>
+            <a href="/dashboard" class="btn btn-secondary">📊 Dashboard</a>
+            <a href="/analytics" class="btn btn-secondary">📈 Live Analytics</a>
+            <a href="/verify" class="btn btn-secondary">🔎 Verify Vote</a>
+        </div>
+        
+        <div class="border-top">
+            <p style="text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+                Powered by Blockchain Technology<br>
+                Each vote is cryptographically secured
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+

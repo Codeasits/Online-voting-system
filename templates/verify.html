@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Vote - Online Voting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon">🔎</div>
+            <h2>Verify Your Vote</h2>
+        </div>
+        
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 25px;">
+            Enter your vote receipt details to verify it on the blockchain
+        </p>
+        
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+        
+        <form method="post">
+            <div class="form-group">
+                <label for="block_index">Block Number</label>
+                <input type="number" id="block_index" name="block_index" 
+                       placeholder="Enter block number from receipt" 
+                       min="1" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="block_hash">Block Hash</label>
+                <input type="text" id="block_hash" name="block_hash" 
+                       placeholder="Enter block hash from receipt" 
+                       required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">🔍 Verify Vote</button>
+        </form>
+        
+        <!-- Verification Result -->
+        {% if result %}
+        <div class="receipt" style="margin-top: 25px;">
+            {% if result.valid %}
+            <div class="receipt-title" style="color: var(--success-color);">
+                ✅ Vote Verified Successfully
+            </div>
+            
+            <div class="receipt-item">
+                <span class="receipt-label">Status</span>
+                <span class="receipt-value" style="color: var(--success-color);">✓ Valid</span>
+            </div>
+            
+            <div class="receipt-item">
+                <span class="receipt-label">Message</span>
+                <span class="receipt-value">{{ result.message }}</span>
+            </div>
+            
+            {% if result.vote_data %}
+            <div class="receipt-item">
+                <span class="receipt-label">Voter ID</span>
+                <span class="receipt-value">{{ result.vote_data.voter_id[:4] }}****{{ result.vote_data.voter_id[-4:] }}</span>
+            </div>
+            
+            <div class="receipt-item">
+                <span class="receipt-label">Party Voted</span>
+                <span class="receipt-value">{{ result.vote_data.party }}</span>
+            </div>
+            {% endif %}
+            
+            <div class="receipt-item">
+                <span class="receipt-label">Block Hash</span>
+                <div class="hash-display">{{ result.block_hash }}</div>
+            </div>
+            
+            <div class="blockchain-status valid" style="margin-top: 15px;">
+                <span class="status-icon">🔗</span>
+                <span>This vote is permanently recorded on the blockchain!</span>
+            </div>
+            
+            {% else %}
+            <div class="receipt-title" style="color: var(--danger-color);">
+                ❌ Verification Failed
+            </div>
+            
+            <div class="receipt-item">
+                <span class="receipt-label">Status</span>
+                <span class="receipt-value" style="color: var(--danger-color);">✗ Invalid</span>
+            </div>
+            
+            <div class="receipt-item">
+                <span class="receipt-label">Message</span>
+                <span class="receipt-value">{{ result.message }}</span>
+            </div>
+            
+            <div class="blockchain-status invalid" style="margin-top: 15px;">
+                <span class="status-icon">⚠️</span>
+                <span>Warning: This vote may have been tampered with!</span>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        <div class="p-20 border-top">
+            <p style="text-align: center; color: var(--text-secondary); font-size: 0.85rem;">
+                🔒 Blockchain verification ensures your vote cannot be altered<br>
+                Each vote has a unique cryptographic hash
+            </p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/" style="color: var(--primary-color);">← Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authenticate - Online Voting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon">🔐</div>
+            <h2>Authentication</h2>
+        </div>
+        
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+        
+        <form method="post">
+            <div class="form-group">
+                <label for="aadhaar">Enter Aadhaar Number</label>
+                <input type="text" id="aadhaar" name="aadhaar" 
+                       placeholder="12-digit Aadhaar" 
+                       maxlength="12" 
+                       required
+                       autocomplete="off">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Proceed to Verification</button>
+        </form>
+        
+        <div class="p-20 border-top">
+            <p style="text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+                🔒 Your Aadhaar details are secure and encrypted
+            </p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/" style="color: var(--primary-color);">← Back to Home</a>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('aadhaar').addEventListener('input', function(e) {
+            this.value = this.value.replace(/\D/g, '').substring(0, 12);
+        });
+    </script>
+</body>
+</html>
+
