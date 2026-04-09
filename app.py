@@ -5,7 +5,7 @@ import face_recognition
 from PIL import Image
 from blockchain import blockchain
 
-app = Flask(__name__)
+app = Flask(__name__) 
 app.secret_key = "secure_voting_key_2024"
 
 DB = "database.db"
